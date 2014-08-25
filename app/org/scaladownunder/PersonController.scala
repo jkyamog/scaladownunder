@@ -62,7 +62,7 @@ object PersonController extends Controller with DatomicDB {
       transact andThen
       getEntity(id)
     } map { entity =>
-      Ok(Json.toJson(entity.toMap))
+      Ok(Json.toJson(writesPerson.writes(Person.unapply(entity))))
     }
   }
 
@@ -84,11 +84,13 @@ object PersonController extends Controller with DatomicDB {
 
   val readsPerson = (
     (__ \ 'firstName).readNullable[String] and
-    (__ \ 'surName).readNullable[String]).tupled
+    (__ \ 'surname).readNullable[String]).tupled
 
-//  val writesPerson =
-//    (__ \ 'firstName).writesNullable[String] and
-//      (__ \ 'firstName).writesNullable[String]
+  val writesPerson = (
+    (__ \ 'firstName).writeNullable[String] and
+    (__ \ 'surname).writeNullable[String]
+  ).tupled
+
 }
 
 
@@ -97,4 +99,8 @@ object Person {
 
   val firstName = Attribute(ns / "firstname", SchemaType.string, Cardinality.one)
   val surname = Attribute(ns / "surname", SchemaType.string, Cardinality.one)
+
+  def unapply(entity: Entity): (Option[String], Option[String]) = {
+    (entity.readOpt(firstName), entity.readOpt(surname))
+  }
 }
