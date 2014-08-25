@@ -1,18 +1,20 @@
 package org.scaladownunder
 
+import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import play.api.libs.json._
 import play.api.libs.ws._
 import play.api.mvc._
+import play.api.Play.current
 import play.modules.reactivemongo.MongoController
 import play.modules.reactivemongo.json.collection.JSONCollection
-import play.api.libs.concurrent.Execution.Implicits.defaultContext
+
 import reactivemongo.bson.BSONObjectID
 
 import scala.concurrent.Future
 
 case class Document(title: String, content: String)
 
-object DocumentController extends Controller with MongoController {
+object DocumentController extends Controller with MongoController with ParsersAndCombiners {
 
   def collection: JSONCollection = db.collection[JSONCollection]("docs")
 
@@ -45,11 +47,15 @@ object DocumentController extends Controller with MongoController {
 
   }
 
+  implicit val docFormatter = Json.format[Document]
+
+}
+
+trait ParsersAndCombiners {
+  self: Controller =>
+
   def parseJson(json: WSResponse): Seq[JsObject] = Seq(Json.obj("test data" -> true))
 
   def combineData(source1: Seq[JsObject], source2: Seq[JsObject], docs: List[Document]) = List(Document("title", "content"))
-
-  implicit val docFormatter = Json.format[Document]
-
 }
 
