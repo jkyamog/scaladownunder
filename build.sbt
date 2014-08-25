@@ -2,13 +2,13 @@ name := "scaladownunder"
 
 version := "1.0"
 
-scalaVersion := "2.10.4"
+scalaVersion := "2.11.2"
 
 libraryDependencies ++= Seq(
   ws,
   cache,
-  "com.pellucid" %% "datomisca" % "0.7-alpha-10",
-  "com.pellucid" %% "play-datomisca" % "0.7-alpha-3",
+  "com.pellucid" %% "datomisca" % "0.7-alpha-11",
+  "com.pellucid" %% "datomisca-play-plugin" % "0.7-alpha-4",
   "com.datomic" % "datomic-free" % "0.9.4699" exclude("org.slf4j", "slf4j-nop"),
   "org.reactivemongo" %% "play2-reactivemongo" % "0.10.5.akka23-SNAPSHOT"
 )
