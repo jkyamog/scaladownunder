@@ -4,15 +4,15 @@ class ContactInfoManager { // bean managed by spring
 
   var dao: Dao = _ // wired by spring
 
-  def findOrCreate(contactType: ContactType, contactValue: String, contactLabel: String): ContactInfo = {
+  def findOrCreate(cType: ContactType, cValue: String, cLabel: String): ContactInfo = {
 
     val contactInfos = dao.findAll[ContactInfo]
 
-    contactInfos.find(_.contactValue == contactValue).getOrElse {
+    contactInfos.find(_.contactValue == cValue).getOrElse {
       dao create new ContactInfo {
-          contactType = contactType
-          contactValue = contactValue
-          contactLabel = contactLabel
+          contactType = cType
+          contactValue = cValue
+          contactLabel = cLabel
         }
     }
   }

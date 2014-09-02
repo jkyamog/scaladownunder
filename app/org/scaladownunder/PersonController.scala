@@ -21,8 +21,8 @@ object PersonController extends Controller with DatomicDB {
   def writeToDb(id: Long) = Action.async(parse.json) { request =>
     doDb {
       writerPersonToDb(request.body) andThen
-        transact andThen
-        getEntity(id)
+      transact andThen
+      getEntity(id)
     } map { entity =>
       Ok(Json.toJson(entity))
     }
